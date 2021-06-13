@@ -1,2 +1,2 @@
 # ml-blog-posts
-Code for posts in my ML blog at https://bea.stollnitz.com.
+Code for posts from my ML blog at https://bea.stollnitz.com.
