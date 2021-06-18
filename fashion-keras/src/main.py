@@ -28,8 +28,8 @@ def get_data(batch_size) -> Tuple[tf.data.Dataset, tf.data.Dataset]:
   training_data = training_data / 255.0
   test_data = test_data / 255.0
 
-  train_dataset = tf.data.Dataset.from_tensor_slices((training_data, training_labels)).batch(batch_size)
-  test_dataset = tf.data.Dataset.from_tensor_slices((test_data, test_labels)).batch(batch_size)
+  train_dataset = tf.data.Dataset.from_tensor_slices((training_data, training_labels)).batch(batch_size).shuffle(500)
+  test_dataset = tf.data.Dataset.from_tensor_slices((test_data, test_labels)).batch(batch_size).shuffle(500)
 
   return (train_dataset, test_dataset)
 
@@ -84,7 +84,7 @@ def training_phase():
   model.save_weights('outputs/weights')
 
 
-def predict(model: tf.keras.Model, X: np.ndarray) -> int:
+def predict(model: tf.keras.Model, X: np.ndarray) -> tf.Tensor:
   logits = model(X)
   probabilities = tf.keras.layers.Softmax(axis=1)(logits)
   predicted_index = tf.math.argmax(input=probabilities, axis=1)
@@ -99,15 +99,15 @@ def inference_phase():
 
   (_, test_dataset) = get_data(batch_size)
   (X_batch, actual_index_batch) = next(test_dataset.as_numpy_iterator())
-  X = X_batch[0:1, :, :]
-  actual_index = actual_index_batch[0]
-  actual_name = labels_map[actual_index]
+  X = X_batch[0:3, :, :]
+  actual_indices = actual_index_batch[0:3]
 
-  predicted_index = predict(model, X).numpy()[0]
-  predicted_name = labels_map[predicted_index]
+  predicted_indices = predict(model, X)
 
-  print(f'\nPrediction: {predicted_index} ({predicted_name})')
-  print(f'Actual: {actual_index} ({actual_name})\n')
+  for (actual_index, predicted_index) in zip(actual_indices, predicted_indices):
+    actual_name = labels_map[actual_index]
+    predicted_name = labels_map[predicted_index.numpy()]
+    print(f'Actual: {actual_name}, Predicted: {predicted_name}')
 
 
 def main() -> None:
