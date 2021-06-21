@@ -54,7 +54,7 @@ def get_model() -> tf.keras.Model:
     tf.keras.layers.Flatten(input_shape=(28, 28)),
     tf.keras.layers.Dense(512, activation='relu'),
     tf.keras.layers.Dense(512, activation='relu'),
-    tf.keras.layers.Dense(10, activation='relu')
+    tf.keras.layers.Dense(10)
   ])
   return model
 
