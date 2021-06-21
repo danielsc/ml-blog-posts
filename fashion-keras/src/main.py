@@ -104,6 +104,7 @@ def inference_phase():
 
   predicted_indices = predict(model, X)
 
+  print('\nPredicting:')
   for (actual_index, predicted_index) in zip(actual_indices, predicted_indices):
     actual_name = labels_map[actual_index]
     predicted_name = labels_map[predicted_index.numpy()]
