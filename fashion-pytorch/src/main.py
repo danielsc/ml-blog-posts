@@ -7,7 +7,7 @@ import torch
 from torch import Tensor, nn
 from torch.nn.modules.loss import CrossEntropyLoss
 from torch.optim import Optimizer
-from torch.utils.data import DataLoader, Dataset
+from torch.utils.data import DataLoader
 from torchvision import datasets
 from torchvision.transforms import ToTensor
 
@@ -98,8 +98,9 @@ optimizer: Optimizer) -> None:
 
 
 def evaluate_one_batch(X, y, model, loss_fn) -> Tuple[torch.Tensor, torch.Tensor]:
-  logits = model(X)
-  loss = loss_fn(logits, y)
+  with torch.no_grad():
+    logits = model(X)
+    loss = loss_fn(logits, y)
 
   return (logits, loss)
 
@@ -179,6 +180,7 @@ def inference_phase(device: str):
 
   predicted_indices = predict(model, X)
 
+  print('\nPredicting:')
   for (actual_index, predicted_index) in zip(actual_indices, predicted_indices):
     actual_name = labels_map[actual_index.item()]
     predicted_name = labels_map[predicted_index.item()]
