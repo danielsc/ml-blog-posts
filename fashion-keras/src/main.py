@@ -85,8 +85,8 @@ def training_phase():
 
 
 def predict(model: tf.keras.Model, X: np.ndarray) -> tf.Tensor:
-  logits = model(X)
-  probabilities = tf.keras.layers.Softmax(axis=1)(logits)
+  y_prime = model(X)
+  probabilities = tf.keras.layers.Softmax(axis=1)(y_prime)
   predicted_index = tf.math.argmax(input=probabilities, axis=1)
   return predicted_index
 

@@ -62,13 +62,13 @@ def get_model() -> tf.keras.Model:
 @tf.function
 def fit_one_batch(X, y, model, loss_fn, optimizer) -> Tuple[tf.Tensor, tf.Tensor]:
   with tf.GradientTape() as tape:
-    logits = model(X, training=True)
-    loss = loss_fn(y, logits)
+    y_prime = model(X, training=True)
+    loss = loss_fn(y, y_prime)
 
   grads = tape.gradient(loss, model.trainable_variables)
   optimizer.apply_gradients(zip(grads, model.trainable_variables))
 
-  return (logits, loss)
+  return (y_prime, loss)
 
 
 def fit(dataset: tf.data.Dataset, model: tf.keras.Model, loss_fn: tf.keras.losses.Loss, 
@@ -80,10 +80,10 @@ optimizer: tf.optimizers.Optimizer) -> None:
   print_every = 100
 
   for batch, (X, y) in enumerate(dataset):
-    (logits, loss) = fit_one_batch(X, y, model, loss_fn, optimizer)
+    (y_prime, loss) = fit_one_batch(X, y, model, loss_fn, optimizer)
 
     y = tf.cast(y, tf.int64)
-    correct_item_count += (tf.math.argmax(logits, axis=1) == y).numpy().sum()
+    correct_item_count += (tf.math.argmax(y_prime, axis=1) == y).numpy().sum()
 
     batch_loss = loss.numpy()
     loss_sum += batch_loss
@@ -96,10 +96,10 @@ optimizer: tf.optimizers.Optimizer) -> None:
 
 @tf.function
 def evaluate_one_batch(X, y, model, loss_fn) -> Tuple[tf.Tensor, tf.Tensor]:
-  logits = model(X, training=False)
-  loss = loss_fn(y, logits)
+  y_prime = model(X, training=False)
+  loss = loss_fn(y, y_prime)
 
-  return (logits, loss)
+  return (y_prime, loss)
 
 
 def evaluate(dataset: tf.data.Dataset, model: tf.keras.Model, 
@@ -110,9 +110,9 @@ loss_fn: tf.keras.losses.Loss) -> Tuple[float, float]:
   current_item_count = 0
 
   for (X, y) in dataset:
-    (logits, loss) = evaluate_one_batch(X, y, model, loss_fn)
+    (y_prime, loss) = evaluate_one_batch(X, y, model, loss_fn)
 
-    correct_item_count += (tf.math.argmax(logits, axis=1).numpy() == y.numpy()).sum()
+    correct_item_count += (tf.math.argmax(y_prime, axis=1).numpy() == y.numpy()).sum()
     loss_sum += loss.numpy()
     current_item_count += len(X)
 
@@ -152,8 +152,8 @@ def training_phase():
 
 @tf.function
 def predict(model: tf.keras.Model, X: np.ndarray) -> tf.Tensor:
-  logits = model(X)
-  probabilities = tf.keras.layers.Softmax(axis=1)(logits)
+  y_prime = model(X)
+  probabilities = tf.keras.layers.Softmax(axis=1)(y_prime)
   predicted_index = tf.math.argmax(input=probabilities, axis=1)
   return predicted_index
 

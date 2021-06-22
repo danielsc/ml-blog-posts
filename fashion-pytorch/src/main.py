@@ -63,14 +63,14 @@ def visualize_data(dataloader: DataLoader) -> None:
 
 
 def fit_one_batch(X, y, model, loss_fn, optimizer) -> Tuple[torch.Tensor, torch.Tensor]:
-  logits = model(X)
-  loss = loss_fn(logits, y)
+  y_prime = model(X)
+  loss = loss_fn(y_prime, y)
   
   optimizer.zero_grad()
   loss.backward()
   optimizer.step()
 
-  return (logits, loss)
+  return (y_prime, loss)
 
 
 def fit(device: str, dataloader: DataLoader, model: nn.Module, loss_fn: CrossEntropyLoss, 
@@ -85,9 +85,9 @@ optimizer: Optimizer) -> None:
     X = X.to(device)
     y = y.to(device)
     
-    (logits, loss) = fit_one_batch(X, y, model, loss_fn, optimizer)
+    (y_prime, loss) = fit_one_batch(X, y, model, loss_fn, optimizer)
 
-    correct_item_count += (logits.argmax(1) == y).type(torch.int8).sum().item()
+    correct_item_count += (y_prime.argmax(1) == y).type(torch.int8).sum().item()
     batch_loss = loss.item()
     loss_sum += batch_loss
     current_item_count += len(X)
@@ -99,10 +99,10 @@ optimizer: Optimizer) -> None:
 
 def evaluate_one_batch(X, y, model, loss_fn) -> Tuple[torch.Tensor, torch.Tensor]:
   with torch.no_grad():
-    logits = model(X)
-    loss = loss_fn(logits, y)
+    y_prime = model(X)
+    loss = loss_fn(y_prime, y)
 
-  return (logits, loss)
+  return (y_prime, loss)
 
 
 def evaluate(device: str, dataloader: DataLoader, model: nn.Module, 
@@ -119,9 +119,9 @@ loss_fn: CrossEntropyLoss) -> Tuple[float, float]:
       X = X.to(device)
       y = y.to(device)
 
-      (logits, loss) = evaluate_one_batch(X, y, model, loss_fn)
+      (y_prime, loss) = evaluate_one_batch(X, y, model, loss_fn)
 
-      correct_item_count += (logits.argmax(1) == y).type(torch.int8).sum().item()
+      correct_item_count += (y_prime.argmax(1) == y).type(torch.int8).sum().item()
       loss_sum += loss.item()
       item_count += len(X)
 
@@ -158,8 +158,8 @@ def training_phase(device: str):
 
 def predict(model: nn.Module, X: Tensor) -> torch.Tensor:
   with torch.no_grad():
-    logits = model(X) 
-    probabilities = nn.Softmax(dim=1)(logits)
+    y_prime = model(X) 
+    probabilities = nn.Softmax(dim=1)(y_prime)
     predicted_indices = probabilities.argmax(1)
   return predicted_indices
 

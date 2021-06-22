@@ -14,5 +14,5 @@ class NeuralNetwork(nn.Module):
     )
 
   def forward(self, x):
-    logits = self.sequence(x)
-    return logits
+    y_prime = self.sequence(x)
+    return y_prime
