@@ -79,7 +79,7 @@ optimizer: tf.optimizers.Optimizer) -> None:
   current_item_count = 0
   print_every = 100
 
-  for batch, (X, y) in enumerate(dataset):
+  for batch_index, (X, y) in enumerate(dataset):
     (y_prime, loss) = fit_one_batch(X, y, model, loss_fn, optimizer)
 
     y = tf.cast(y, tf.int64)
@@ -89,9 +89,9 @@ optimizer: tf.optimizers.Optimizer) -> None:
     loss_sum += batch_loss
     current_item_count += len(X)
 
-    if ((batch + 1) % print_every == 0) or ((batch + 1) == batch_count):
+    if ((batch_index + 1) % print_every == 0) or ((batch_index + 1) == batch_count):
       batch_accuracy = correct_item_count / current_item_count * 100
-      print(f'[Batch {batch + 1:>3d} - {current_item_count:>5d} items] accuracy: {batch_accuracy:>0.1f}%, loss: {batch_loss:>7f}')
+      print(f'[Batch {batch_index + 1:>3d} - {current_item_count:>5d} items] accuracy: {batch_accuracy:>0.1f}%, loss: {batch_loss:>7f}')
 
 
 @tf.function
