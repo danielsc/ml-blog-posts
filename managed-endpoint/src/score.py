@@ -1,7 +1,6 @@
 import json
 import logging
 import os
-from typing import Tuple
 
 import numpy
 import torch
@@ -35,37 +34,37 @@ def predict(model: nn.Module, X: Tensor) -> torch.Tensor:
 def init():
   logging.info('Init started')
 
-  # global model
-  # global device
+  global model
+  global device
 
-  # device = 'cuda' if torch.cuda.is_available() else 'cpu'
-  # model_path = os.path.join(os.getenv('AZUREML_MODEL_DIR'), './outputs/weights.pth')
-  # # Replace previous line with next line and uncomment main to test locally. 
-  # # model_path = './outputs/weights.pth'
+  device = 'cuda' if torch.cuda.is_available() else 'cpu'
+  logging.info(f'Device: {device}')
+  model_path = os.path.join(os.getenv('AZUREML_MODEL_DIR'), 'weights.pth')
+  # Replace previous line with next line and uncomment main to test locally. 
+  # model_path = './outputs/weights.pth'
 
-  # model = NeuralNetwork().to(device)
-  # model.load_state_dict(torch.load(model_path))
-  # model.eval()
+  model = NeuralNetwork().to(device)
+  model.load_state_dict(torch.load(model_path))
+  model.eval()
 
   logging.info('Init complete')
+  pass
 
 
 def run(raw_data):
-  logging.info('Request received')
+  logging.info('Run started')
 
-  # # X = json.loads(raw_data)['data']
-  # # X = numpy.array(X)
-  # # X = torch.from_numpy(X).float().to(device)
+  X = json.loads(raw_data)['data']
+  X = numpy.array(X)
+  X = torch.from_numpy(X).float().to(device)
   
-  # # predicted_indices = predict(model, X)
-  # # predicted_names = [labels_map[predicted_index.item()] for predicted_index in predicted_indices]
+  predicted_indices = predict(model, X)
+  predicted_names = [labels_map[predicted_index.item()] for predicted_index in predicted_indices]
 
-  # # logging.info(f'Predicted names: {predicted_names}')
+  logging.info(f'Predicted names: {predicted_names}')
 
-  # # logging.info('Request processed')
-  # return predicted_names
-
-  return 'Returning!'
+  logging.info('Run completed')
+  return predicted_names
 
 
 # if __name__ == '__main__':
