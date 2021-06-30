@@ -25,11 +25,14 @@ labels_map = {
 def get_data(batch_size) -> Tuple[tf.data.Dataset, tf.data.Dataset]:
   (training_data, training_labels), (test_data, test_labels) = tf.keras.datasets.fashion_mnist.load_data()
 
-  training_data = training_data / 255.0
-  test_data = test_data / 255.0
+  train_dataset = tf.data.Dataset.from_tensor_slices((training_data, training_labels))
+  test_dataset = tf.data.Dataset.from_tensor_slices((test_data, test_labels))
 
-  train_dataset = tf.data.Dataset.from_tensor_slices((training_data, training_labels)).batch(batch_size).shuffle(500)
-  test_dataset = tf.data.Dataset.from_tensor_slices((test_data, test_labels)).batch(batch_size).shuffle(500)
+  train_dataset = train_dataset.map(lambda x, y: (float(x) / 255.0, y))
+  test_dataset = test_dataset.map(lambda x, y: (float(x) / 255.0, y))
+
+  train_dataset = train_dataset.batch(batch_size).shuffle(500)
+  test_dataset = test_dataset.batch(batch_size).shuffle(500)
 
   return (train_dataset, test_dataset)
 
