@@ -51,7 +51,8 @@ def get_data(batch_size) -> Tuple[DataLoader, DataLoader]:
 def visualize_data(dataloader: DataLoader) -> None:
   dataset = dataloader.dataset
   figure = plt.figure(figsize=(8, 8))
-  cols, rows = 3, 3
+  cols = 3
+  rows = 3
   for i in range(1, cols * rows + 1):
     sample_idx = random.randint(0, len(dataset))
     (image, label) = dataset[sample_idx]
