@@ -1,6 +1,6 @@
 import os
 import random
-from typing import Tuple, List
+from typing import Tuple
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
@@ -28,8 +28,8 @@ def get_data(batch_size) -> Tuple[tf.data.Dataset, tf.data.Dataset]:
   train_dataset = tf.data.Dataset.from_tensor_slices((training_data, training_labels))
   test_dataset = tf.data.Dataset.from_tensor_slices((test_data, test_labels))
 
-  train_dataset = train_dataset.map(lambda x, y: (float(x) / 255.0, y))
-  test_dataset = test_dataset.map(lambda x, y: (float(x) / 255.0, y))
+  train_dataset = train_dataset.map(lambda image, label: (float(image) / 255.0, label))
+  test_dataset = test_dataset.map(lambda image, label: (float(image) / 255.0, label))
 
   train_dataset = train_dataset.batch(batch_size).shuffle(500)
   test_dataset = test_dataset.batch(batch_size).shuffle(500)
