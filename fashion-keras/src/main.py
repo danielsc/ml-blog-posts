@@ -75,7 +75,7 @@ def training_phase():
   # model.summary()
 
   loss_fn = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
-  optimizer = tf.optimizers.SGD(learning_rate)
+  optimizer = tf.keras.optimizers.SGD(learning_rate)
   metrics = ['accuracy']
   model.compile(optimizer, loss_fn, metrics)
 
@@ -92,8 +92,8 @@ def training_phase():
 def predict(model: tf.keras.Model, X: np.ndarray) -> tf.Tensor:
   y_prime = model(X)
   probabilities = tf.keras.layers.Softmax(axis=1)(y_prime)
-  predicted_index = tf.math.argmax(input=probabilities, axis=1)
-  return predicted_index
+  predicted_indices = tf.math.argmax(input=probabilities, axis=1)
+  return predicted_indices
 
 
 def inference_phase():
@@ -103,7 +103,7 @@ def inference_phase():
   model.load_weights('outputs/weights').expect_partial()
 
   (_, test_dataset) = get_data(batch_size)
-  (X_batch, actual_index_batch) = next(test_dataset.as_numpy_iterator())
+  (X_batch, actual_index_batch) = test_dataset.as_numpy_iterator().next()
   X = X_batch[0:3, :, :]
   actual_indices = actual_index_batch[0:3]
 
