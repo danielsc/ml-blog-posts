@@ -1,7 +1,7 @@
 import os
 import random
 import time
-from typing import List, Tuple
+from typing import Tuple
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
