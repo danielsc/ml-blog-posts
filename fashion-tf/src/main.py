@@ -23,7 +23,7 @@ labels_map = {
   }
 
 
-def get_data(batch_size) -> Tuple[tf.data.Dataset, tf.data.Dataset]:
+def get_data(batch_size: int) -> Tuple[tf.data.Dataset, tf.data.Dataset]:
   (training_data, training_labels), (test_data, test_labels) = tf.keras.datasets.fashion_mnist.load_data()
 
   train_dataset = tf.data.Dataset.from_tensor_slices((training_data, training_labels))
@@ -38,7 +38,7 @@ def get_data(batch_size) -> Tuple[tf.data.Dataset, tf.data.Dataset]:
   return (train_dataset, test_dataset)
 
 
-def visualize_data(dataset) -> None:
+def visualize_data(dataset: tf.data.Dataset) -> None:
   first_batch = dataset.as_numpy_iterator().next()
   figure = plt.figure(figsize=(8, 8))
   cols = 3
@@ -65,7 +65,8 @@ def get_model() -> tf.keras.Model:
 
 
 @tf.function
-def fit_one_batch(X, y, model, loss_fn, optimizer) -> Tuple[tf.Tensor, tf.Tensor]:
+def fit_one_batch(X: tf.Tensor, y: tf.Tensor, model: tf.keras.Model, loss_fn: tf.keras.losses.Loss, 
+optimizer: tf.keras.optimizers.Optimizer) -> Tuple[tf.Tensor, tf.Tensor]:
   with tf.GradientTape() as tape:
     y_prime = model(X, training=True)
     loss = loss_fn(y, y_prime)
@@ -100,7 +101,8 @@ optimizer: tf.optimizers.Optimizer) -> None:
 
 
 @tf.function
-def evaluate_one_batch(X, y, model, loss_fn) -> Tuple[tf.Tensor, tf.Tensor]:
+def evaluate_one_batch(X: tf.Tensor, y: tf.Tensor, model: tf.keras.Model, 
+loss_fn: tf.keras.losses.Loss) -> Tuple[tf.Tensor, tf.Tensor]:
   y_prime = model(X, training=False)
   loss = loss_fn(y, y_prime)
 

@@ -27,7 +27,7 @@ labels_map = {
   }
 
 
-def get_data(batch_size) -> Tuple[DataLoader, DataLoader]:
+def get_data(batch_size: int) -> Tuple[DataLoader, DataLoader]:
   training_data = datasets.FashionMNIST(
     root='data',
     train=True,
@@ -63,7 +63,8 @@ def visualize_data(dataloader: DataLoader) -> None:
   plt.show()
 
 
-def fit_one_batch(X, y, model, loss_fn, optimizer) -> Tuple[torch.Tensor, torch.Tensor]:
+def fit_one_batch(X: torch.Tensor, y: torch.Tensor, model: NeuralNetwork, 
+loss_fn: CrossEntropyLoss, optimizer: Optimizer) -> Tuple[torch.Tensor, torch.Tensor]:
   y_prime = model(X)
   loss = loss_fn(y_prime, y)
   
@@ -98,7 +99,8 @@ optimizer: Optimizer) -> None:
       print(f'[Batch {batch_index + 1:>3d} - {current_item_count:>5d} items] accuracy: {batch_accuracy:>0.1f}%, loss: {batch_loss:>7f}')
 
 
-def evaluate_one_batch(X, y, model, loss_fn) -> Tuple[torch.Tensor, torch.Tensor]:
+def evaluate_one_batch(X: torch.tensor, y: torch.tensor, model: NeuralNetwork, 
+loss_fn: CrossEntropyLoss) -> Tuple[torch.Tensor, torch.Tensor]:
   with torch.no_grad():
     y_prime = model(X)
     loss = loss_fn(y_prime, y)
