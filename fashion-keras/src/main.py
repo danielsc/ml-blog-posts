@@ -22,7 +22,7 @@ labels_map = {
   }
 
 
-def get_data(batch_size) -> Tuple[tf.data.Dataset, tf.data.Dataset]:
+def get_data(batch_size: int) -> Tuple[tf.data.Dataset, tf.data.Dataset]:
   (training_data, training_labels), (test_data, test_labels) = tf.keras.datasets.fashion_mnist.load_data()
 
   train_dataset = tf.data.Dataset.from_tensor_slices((training_data, training_labels))
@@ -37,7 +37,7 @@ def get_data(batch_size) -> Tuple[tf.data.Dataset, tf.data.Dataset]:
   return (train_dataset, test_dataset)
 
 
-def visualize_data(dataset) -> None:
+def visualize_data(dataset: tf.data.Dataset) -> None:
   first_batch = dataset.as_numpy_iterator().next()
   figure = plt.figure(figsize=(8, 8))
   cols = 3
