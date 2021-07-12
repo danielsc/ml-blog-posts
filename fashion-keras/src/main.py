@@ -89,13 +89,6 @@ def training_phase():
   model.save_weights('outputs/weights')
 
 
-def predict(model: tf.keras.Model, X: np.ndarray) -> tf.Tensor:
-  y_prime = model(X)
-  probabilities = tf.nn.softmax(y_prime, axis=1)
-  predicted_indices = tf.math.argmax(input=probabilities, axis=1)
-  return predicted_indices
-
-
 def inference_phase():
   batch_size = 64
 
@@ -107,12 +100,12 @@ def inference_phase():
   X = X_batch[0:3, :, :]
   actual_indices = actual_index_batch[0:3]
 
-  predicted_indices = predict(model, X)
+  predicted_indices = model.predict(X)
 
   print('\nPredicting:')
   for (actual_index, predicted_index) in zip(actual_indices, predicted_indices):
     actual_name = labels_map[actual_index]
-    predicted_name = labels_map[predicted_index.numpy()]
+    predicted_name = labels_map[tf.math.argmax(predicted_index).numpy()]
     print(f'Actual: {actual_name}, Predicted: {predicted_name}')
 
 
