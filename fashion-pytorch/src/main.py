@@ -103,7 +103,7 @@ def evaluate_one_batch(X: torch.tensor, y: torch.tensor, model: NeuralNetwork,
 loss_fn: CrossEntropyLoss) -> Tuple[torch.Tensor, torch.Tensor]:
   with torch.no_grad():
     y_prime = model(X)
-    loss = loss_fn(y_prime, y)
+    loss = loss_fn(y, y_prime)
 
   return (y_prime, loss)
 
