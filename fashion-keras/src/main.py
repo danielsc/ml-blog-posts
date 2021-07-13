@@ -100,12 +100,13 @@ def inference_phase():
   X = X_batch[0:3, :, :]
   actual_indices = actual_index_batch[0:3]
 
-  predicted_indices = model.predict(X)
+  predictions = model.predict(X)
 
   print('\nPredicting:')
-  for (actual_index, predicted_index) in zip(actual_indices, predicted_indices):
+  for (actual_index, prediction) in zip(actual_indices, predictions):
     actual_name = labels_map[actual_index]
-    predicted_name = labels_map[tf.math.argmax(predicted_index).numpy()]
+    predicted_index = tf.math.argmax(prediction).numpy()
+    predicted_name = labels_map[predicted_index]
     print(f'Actual: {actual_name}, Predicted: {predicted_name}')
 
 
