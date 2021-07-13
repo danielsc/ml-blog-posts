@@ -23,10 +23,10 @@ labels_map = {
 
 
 def get_data(batch_size: int) -> Tuple[tf.data.Dataset, tf.data.Dataset]:
-  (training_data, training_labels), (test_data, test_labels) = tf.keras.datasets.fashion_mnist.load_data()
+  (training_images, training_labels), (test_images, test_labels) = tf.keras.datasets.fashion_mnist.load_data()
 
-  train_dataset = tf.data.Dataset.from_tensor_slices((training_data, training_labels))
-  test_dataset = tf.data.Dataset.from_tensor_slices((test_data, test_labels))
+  train_dataset = tf.data.Dataset.from_tensor_slices((training_images, training_labels))
+  test_dataset = tf.data.Dataset.from_tensor_slices((test_images, test_labels))
 
   train_dataset = train_dataset.map(lambda image, label: (float(image) / 255.0, label))
   test_dataset = test_dataset.map(lambda image, label: (float(image) / 255.0, label))
