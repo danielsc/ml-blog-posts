@@ -8,6 +8,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
 
+from neural_network import NeuralNetwork
+
+
 labels_map = {
     0: 'T-Shirt',
     1: 'Trouser',
@@ -53,16 +56,6 @@ def visualize_data(dataset: tf.data.Dataset) -> None:
   plt.show()
 
 
-def get_model() -> tf.keras.Sequential:
-  model = tf.keras.Sequential([
-    tf.keras.layers.Flatten(input_shape=(28, 28)),
-    tf.keras.layers.Dense(512, activation='relu'),
-    tf.keras.layers.Dense(512, activation='relu'),
-    tf.keras.layers.Dense(10)
-  ])
-  return model
-
-
 def training_phase():
   learning_rate = 0.1
   batch_size = 64
@@ -71,7 +64,7 @@ def training_phase():
   (train_dataset, test_dataset) = get_data(batch_size)
   # visualize_data(train_dataset)
 
-  model = get_model()
+  model = NeuralNetwork()
   # model.summary()
 
   loss_fn = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
@@ -92,7 +85,7 @@ def training_phase():
 def inference_phase():
   batch_size = 64
 
-  model = get_model()
+  model = NeuralNetwork()
   model.load_weights('outputs/weights').expect_partial()
 
   (_, test_dataset) = get_data(batch_size)
