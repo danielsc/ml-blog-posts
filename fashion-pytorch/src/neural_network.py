@@ -14,6 +14,6 @@ class NeuralNetwork(nn.Module):
       nn.Linear(512, 10)
     )
 
-  def forward(self, x: torch.Tensor):
+  def forward(self, x: torch.Tensor) -> torch.Tensor:
     y_prime = self.sequence(x)
     return y_prime
