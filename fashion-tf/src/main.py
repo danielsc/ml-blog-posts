@@ -127,7 +127,7 @@ def training_phase():
   epochs = 2
 
   (train_dataset, test_dataset) = get_data(batch_size)
-  visualize_data(train_dataset)
+  # visualize_data(train_dataset)
 
   model = NeuralNetwork()
   # model.summary()
@@ -140,8 +140,8 @@ def training_phase():
   for epoch in range(epochs):
     print(f'\nEpoch {epoch + 1}\n-------------------------------')
     fit(train_dataset, model, loss_fn, optimizer)
-  t_ellapsed = time.time() - t_begin
-  print(f'\nTime per epoch: {t_ellapsed / epochs :>.3f} sec' )
+  t_elapsed = time.time() - t_begin
+  print(f'\nTime per epoch: {t_elapsed / epochs :>.3f} sec' )
 
   print('\nEvaluating:')
   (test_loss, test_accuracy) = evaluate(test_dataset, model, loss_fn)
@@ -154,8 +154,8 @@ def training_phase():
 def predict(model: tf.keras.Model, X: np.ndarray) -> tf.Tensor:
   y_prime = model(X)
   probabilities = tf.nn.softmax(y_prime, axis=1)
-  predicted_index = tf.math.argmax(input=probabilities, axis=1)
-  return predicted_index
+  predicted_indices = tf.math.argmax(input=probabilities, axis=1)
+  return predicted_indices
 
 
 def inference_phase():
