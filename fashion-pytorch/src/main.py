@@ -66,7 +66,7 @@ def visualize_data(dataloader: DataLoader) -> None:
 def fit_one_batch(X: torch.Tensor, y: torch.Tensor, model: NeuralNetwork, 
 loss_fn: CrossEntropyLoss, optimizer: Optimizer) -> Tuple[torch.Tensor, torch.Tensor]:
   y_prime = model(X)
-  loss = loss_fn(y, y_prime)
+  loss = loss_fn(y_prime, y)
   
   optimizer.zero_grad()
   loss.backward()
@@ -103,7 +103,7 @@ def evaluate_one_batch(X: torch.tensor, y: torch.tensor, model: NeuralNetwork,
 loss_fn: CrossEntropyLoss) -> Tuple[torch.Tensor, torch.Tensor]:
   with torch.no_grad():
     y_prime = model(X)
-    loss = loss_fn(y, y_prime)
+    loss = loss_fn(y_prime, y)
 
   return (y_prime, loss)
 
