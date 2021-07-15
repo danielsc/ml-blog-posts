@@ -162,7 +162,7 @@ def training_phase(device: str):
 def predict(model: nn.Module, X: Tensor) -> torch.Tensor:
   with torch.no_grad():
     y_prime = model(X) 
-    probabilities = nn.Softmax(dim=1)(y_prime)
+    probabilities = nn.functional.softmax(y_prime, dim=1)
     predicted_indices = probabilities.argmax(1)
   return predicted_indices
 
