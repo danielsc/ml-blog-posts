@@ -152,7 +152,7 @@ def training_phase():
 
 @tf.function
 def predict(model: tf.keras.Model, X: np.ndarray) -> tf.Tensor:
-  y_prime = model(X)
+  y_prime = model(X, training=False)
   probabilities = tf.nn.softmax(y_prime, axis=1)
   predicted_indices = tf.math.argmax(input=probabilities, axis=1)
   return predicted_indices
