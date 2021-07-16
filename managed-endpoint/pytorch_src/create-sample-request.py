@@ -7,7 +7,7 @@ def create_sample_request() -> None:
   
   (X_batch, _) = next(iter(test_dataloader))
   X = X_batch[0:3, :, :, :].cpu().numpy().tolist()
-  with open('data/sample_request.json', 'w') as file:
+  with open('sample_request/sample_request.json', 'w') as file:
     json.dump({ 'data': X }, file)
 
 
