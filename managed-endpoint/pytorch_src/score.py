@@ -69,6 +69,6 @@ def run(raw_data):
 
 # if __name__ == '__main__':
 #   init()
-#   with open('data/sample_request.json') as file:
+#   with open('sample_request/sample_request.json') as file:
 #     raw_data = file.read()
 #   print(run(raw_data))  
