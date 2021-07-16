@@ -1,4 +1,4 @@
-name: managed-endpoint-train-pytorch
+name: endpoint-train-pytorch
 channels:
   - pytorch
   - conda-forge
@@ -7,4 +7,3 @@ dependencies:
   - python=3.7
   - pytorch=1.7
   - torchvision
-  - matplotlib

@@ -1,4 +1,4 @@
-name: managed-endpoint-train-tf
+name: endpoint-train-tf
 channels:
   - pytorch
   - conda-forge
@@ -6,4 +6,3 @@ channels:
 dependencies:
   - python=3.7
   - tensorflow=2.4
-  - matplotlib

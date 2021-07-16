@@ -1,4 +1,4 @@
-name: managed-endpoint-score-pytorch
+name: endpoint-score-pytorch
 channels:
   - pytorch
   - conda-forge
