@@ -1,3 +1,4 @@
+import torch
 from torch import nn
 
 
@@ -10,10 +11,9 @@ class NeuralNetwork(nn.Module):
       nn.ReLU(),
       nn.Linear(512, 512),
       nn.ReLU(),
-      nn.Linear(512, 10),
-      nn.ReLU()
+      nn.Linear(512, 10)
     )
 
-  def forward(self, x):
-    logits = self.sequence(x)
-    return logits
+  def forward(self, x: torch.Tensor) -> torch.Tensor:
+    y_prime = self.sequence(x)
+    return y_prime

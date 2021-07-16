@@ -2,9 +2,8 @@ import json
 import logging
 import os
 
-import numpy
-import torch
-from torch import Tensor, nn
+import numpy as np
+import tensorflow as tf
 
 from neural_network import NeuralNetwork
 
@@ -23,11 +22,11 @@ labels_map = {
   }
 
 
-def predict(model: nn.Module, X: Tensor) -> torch.Tensor:
-  with torch.no_grad():
-    logits = model(X) 
-    probabilities = nn.Softmax(dim=1)(logits)
-    predicted_indices = probabilities.argmax(1)
+@tf.function
+def predict(model: tf.keras.Model, X: np.ndarray) -> tf.Tensor:
+  y_prime = model(X, training=False)
+  probabilities = tf.nn.softmax(y_prime, axis=1)
+  predicted_indices = tf.math.argmax(input=probabilities, axis=1)
   return predicted_indices
 
 
@@ -37,15 +36,12 @@ def init():
   global model
   global device
 
-  device = 'cuda' if torch.cuda.is_available() else 'cpu'
-  logging.info(f'Device: {device}')
+  # device = 'cuda' if torch.cuda.is_available() else 'cpu'
+  # logging.info(f'Device: {device}')
   model_path = os.path.join(os.getenv('AZUREML_MODEL_DIR'), 'weights.pth')
-  # Replace previous line with next line and uncomment main to test locally. 
-  # model_path = './outputs/weights.pth'
 
-  model = NeuralNetwork().to(device)
-  model.load_state_dict(torch.load(model_path))
-  model.eval()
+  model = NeuralNetwork()
+  model.load_weights(model_path)
 
   logging.info('Init complete')
   pass
@@ -55,8 +51,7 @@ def run(raw_data):
   logging.info('Run started')
 
   X = json.loads(raw_data)['data']
-  X = numpy.array(X)
-  X = torch.from_numpy(X).float().to(device)
+  X = np.array(X)
   
   predicted_indices = predict(model, X)
   predicted_names = [labels_map[predicted_index.item()] for predicted_index in predicted_indices]
@@ -65,10 +60,3 @@ def run(raw_data):
 
   logging.info('Run completed')
   return predicted_names
-
-
-# if __name__ == '__main__':
-#   init()
-#   with open('outputs/sample_request.json') as file:
-#     raw_data = file.read()
-#   print(run(raw_data))  

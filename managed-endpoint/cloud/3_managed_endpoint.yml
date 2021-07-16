@@ -1,5 +1,5 @@
 $schema: https://azuremlschemas.azureedge.net/latest/managedOnlineEndpoint.schema.json
-name: fashion-endpoint
+name: fashion-endpoint-3
 type: online
 auth_mode: key
 traffic:
@@ -7,25 +7,15 @@ traffic:
 
 deployments:
   - name: blue
-    model:
-      name: fashion-model
-      version: 1
-      local_path: '../outputs/weights.pth'
+    model: azureml:fashion-pytorch-model:1
     code_configuration:
       code:
-        local_path: ../src/
+        local_path: ../tf_src/
       scoring_script: score.py
-    environment:
-      name: fashion-score-env
-      version: 1
-      path: .
-      conda_file: file:../conda/conda_score.yml
-      docker:
-        image: mcr.microsoft.com/azureml/openmpi3.1.2-cuda10.2-cudnn7-ubuntu18.04
+    environment: azureml:AzureML-tensorflow-2.4-ubuntu18.04-py37-cuda11.0.3-gpu-inference:1
     instance_type: Standard_NC6s_v3
     scale_settings:
       scale_type: Manual
       instance_count: 2
       min_instances: 1
       max_instances: 2
-    

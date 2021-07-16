@@ -1,11 +1,11 @@
-name: managed-endpoint-score
+name: managed-endpoint-score-pytorch
 channels:
   - pytorch
   - conda-forge
   - defaults
 dependencies:
-  - python=3.8.10
-  - pytorch==1.8.1=py3.8_cuda10.2_cudnn7.6.5_0
+  - python=3.7
+  - pytorch=1.7
   - pip
   - pip:
     - azureml-defaults

@@ -1,10 +1,7 @@
-import json
-import random
 from typing import Tuple
 
-import matplotlib.pyplot as plt
 import torch
-from torch import Tensor, nn
+from torch import nn
 from torch.nn.modules.loss import CrossEntropyLoss
 from torch.optim import Optimizer
 from torch.utils.data import DataLoader
@@ -27,7 +24,7 @@ labels_map = {
   }
 
 
-def get_data(batch_size) -> Tuple[DataLoader, DataLoader]:
+def get_data(batch_size: int) -> Tuple[DataLoader, DataLoader]:
   training_data = datasets.FashionMNIST(
     root='data',
     train=True,
@@ -48,21 +45,8 @@ def get_data(batch_size) -> Tuple[DataLoader, DataLoader]:
   return (train_dataloader, test_dataloader)
 
 
-def visualize_data(dataloader: DataLoader) -> None:
-  dataset = dataloader.dataset
-  figure = plt.figure(figsize=(8, 8))
-  cols, rows = 3, 3
-  for i in range(1, cols * rows + 1):
-    sample_idx = random.randint(0, len(dataset))
-    (image, label) = dataset[sample_idx]
-    figure.add_subplot(rows, cols, i)
-    plt.title(labels_map[label])
-    plt.axis('off')
-    plt.imshow(image.squeeze(), cmap='gray')
-  plt.show()
-
-
-def fit_one_batch(X, y, model, loss_fn, optimizer) -> Tuple[torch.Tensor, torch.Tensor]:
+def fit_one_batch(X: torch.Tensor, y: torch.Tensor, model: NeuralNetwork, 
+loss_fn: CrossEntropyLoss, optimizer: Optimizer) -> Tuple[torch.Tensor, torch.Tensor]:
   y_prime = model(X)
   loss = loss_fn(y_prime, y)
   
@@ -97,7 +81,8 @@ optimizer: Optimizer) -> None:
       print(f'[Batch {batch_index + 1:>3d} - {current_item_count:>5d} items] accuracy: {batch_accuracy:>0.1f}%, loss: {batch_loss:>7f}')
 
 
-def evaluate_one_batch(X, y, model, loss_fn) -> Tuple[torch.Tensor, torch.Tensor]:
+def evaluate_one_batch(X: torch.tensor, y: torch.tensor, model: NeuralNetwork, 
+loss_fn: CrossEntropyLoss) -> Tuple[torch.Tensor, torch.Tensor]:
   with torch.no_grad():
     y_prime = model(X)
     loss = loss_fn(y_prime, y)
@@ -136,10 +121,8 @@ def training_phase(device: str):
   epochs = 2
 
   (train_dataloader, test_dataloader) = get_data(batch_size)
-  # visualize_data(train_dataloader)
 
   model = NeuralNetwork().to(device)
-  # print(model)
 
   loss_fn = nn.CrossEntropyLoss()
   optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
@@ -153,8 +136,8 @@ def training_phase(device: str):
   (test_loss, test_accuracy) = evaluate(device, test_dataloader, model, loss_fn)
   print(f'Test accuracy: {test_accuracy * 100:>0.1f}%, test loss: {test_loss:>8f}')
 
-  torch.save(model.state_dict(), 'outputs/weights.pth')
-    
+  torch.save(model.state_dict(), 'pytorch_model/weights.pth')
+
 
 def main() -> None:
   device = 'cuda' if torch.cuda.is_available() else 'cpu'
