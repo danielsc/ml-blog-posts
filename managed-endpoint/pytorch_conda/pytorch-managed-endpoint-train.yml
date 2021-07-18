@@ -1,4 +1,4 @@
-name: endpoint-train-pytorch
+name: pytorch-managed-endpoint-train
 channels:
   - pytorch
   - conda-forge

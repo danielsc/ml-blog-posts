@@ -36,9 +36,11 @@ def init():
   global model
   global device
 
-  # device = 'cuda' if torch.cuda.is_available() else 'cpu'
-  # logging.info(f'Device: {device}')
-  model_path = os.path.join(os.getenv('AZUREML_MODEL_DIR'), 'weights.pth')
+  physical_devices = tf.config.list_physical_devices('GPU')
+  logging.info("Num GPUs:", len(physical_devices))
+  model_path = os.path.join(os.getenv('AZUREML_MODEL_DIR'), 'tf_model/weights')
+  # Replace previous line with next line and uncomment main to test locally. 
+  # model_path = './tf_model/weights'
 
   model = NeuralNetwork()
   model.load_weights(model_path)
@@ -54,9 +56,16 @@ def run(raw_data):
   X = np.array(X)
   
   predicted_indices = predict(model, X)
-  predicted_names = [labels_map[predicted_index.item()] for predicted_index in predicted_indices]
+  predicted_names = [labels_map[predicted_index.numpy().sum()] for predicted_index in predicted_indices]
 
   logging.info(f'Predicted names: {predicted_names}')
 
   logging.info('Run completed')
   return predicted_names
+
+
+# if __name__ == '__main__':
+#   init()
+#   with open('sample_request/sample_request.json') as file:
+#     raw_data = file.read()
+#   print(run(raw_data))  

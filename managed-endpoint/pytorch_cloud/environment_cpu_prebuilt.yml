@@ -1,5 +1,0 @@
-$schema: https://azuremlschemas.azureedge.net/latest/environment.schema.json
-name: pytorch-cpu-inference-env
-version: 1
-docker:
-  image: mcr.microsoft.com/azureml/pytorch-1.7-ubuntu18.04-py37-cpu-inference:latest

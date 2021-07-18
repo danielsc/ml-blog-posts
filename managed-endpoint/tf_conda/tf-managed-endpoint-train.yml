@@ -1,6 +1,5 @@
-name: endpoint-train-tf
+name: tf-managed-endpoint-train
 channels:
-  - pytorch
   - conda-forge
   - defaults
 dependencies:

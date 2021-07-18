@@ -1,12 +1,9 @@
 import os
-import random
 import time
 from typing import Tuple
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
-import matplotlib.pyplot as plt
-import numpy as np
 import tensorflow as tf
 
 from neural_network import NeuralNetwork
@@ -39,22 +36,6 @@ def get_data(batch_size: int) -> Tuple[tf.data.Dataset, tf.data.Dataset]:
   test_dataset = test_dataset.batch(batch_size).shuffle(500)
 
   return (train_dataset, test_dataset)
-
-
-def visualize_data(dataset: tf.data.Dataset) -> None:
-  first_batch = dataset.as_numpy_iterator().next()
-  figure = plt.figure(figsize=(8, 8))
-  cols = 3
-  rows = 3
-  for i in range(1, cols * rows + 1):
-    sample_idx = random.randint(0, len(first_batch[0]))
-    image = first_batch[0][sample_idx]
-    label = first_batch[1][sample_idx]
-    figure.add_subplot(rows, cols, i)
-    plt.title(labels_map[label])
-    plt.axis('off')
-    plt.imshow(image.squeeze(), cmap='gray')
-  plt.show()
 
 
 @tf.function

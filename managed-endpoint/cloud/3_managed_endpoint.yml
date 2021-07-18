@@ -7,7 +7,7 @@ traffic:
 
 deployments:
   - name: blue
-    model: azureml:fashion-pytorch-model:1
+    model: azureml:tf-fashion-weights:1
     code_configuration:
       code:
         local_path: ../tf_src/

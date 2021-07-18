@@ -1,5 +1,5 @@
 $schema: https://azuremlschemas.azureedge.net/latest/model.schema.json
-name: fashion-tf-model
+name: tf-fashion-weights
 version: 1
 # To register a model, specify the local path for the saved model
-local_path: '../tf_model/weights.index'
+local_path: '../tf_model/'
