@@ -1,11 +1,9 @@
 import logging
 import os
 
-import torch
-from torch import Tensor, nn
+import numpy as np
 from PIL import Image
-from torchvision import transforms
-
+import tensorflow as tf
 
 from neural_network import NeuralNetwork
 
@@ -22,13 +20,13 @@ labels_map = {
     8: 'Bag',
     9: 'Ankle Boot',
   }
-  
 
-def predict(model: nn.Module, X: Tensor) -> torch.Tensor:
-  with torch.no_grad():
-    y_prime = model(X) 
-    probabilities = nn.functional.softmax(y_prime, dim=1)
-    predicted_indices = probabilities.argmax(1)
+
+@tf.function
+def predict(model: tf.keras.Model, X: np.ndarray) -> tf.Tensor:
+  y_prime = model(X, training=False)
+  probabilities = tf.nn.softmax(y_prime, axis=1)
+  predicted_indices = tf.math.argmax(input=probabilities, axis=1)
   return predicted_indices
 
 
@@ -38,14 +36,13 @@ def init():
   global model
   global device
 
-  device = 'cuda' if torch.cuda.is_available() else 'cpu'
-  logging.info(f'Device: {device}')
-  model_path = os.path.join(os.getenv('AZUREML_MODEL_DIR'), 'model.pth')
-  # Replace previous line with next line and uncomment main to test locally. 
-  # model_path = './pytorch_model/model.pth'
+  physical_devices = tf.config.list_physical_devices('GPU')
+  logging.info("Num GPUs:", len(physical_devices))
 
-  model = torch.load(model_path)
-  model.eval()
+  model_path = os.path.join(os.getenv('AZUREML_MODEL_DIR'), 'tf_model')
+  # Replace previous line with next line and uncomment main to test locally. 
+  # model_path = './tf_model'
+  model = tf.keras.models.load_model(model_path)
 
   logging.info('Init complete')
   pass
@@ -54,14 +51,11 @@ def init():
 def run(mini_batch):
   logging.info(f'Run started: {__file__}, run({mini_batch}')
   predicted_names = []
-  transform = transforms.ToTensor()
-  device = 'cuda' if torch.cuda.is_available() else 'cpu'
-  logging.info(f'Device: {device}')
 
   for image_path in mini_batch:
     image = Image.open(image_path)
-    tensor = transform(image).to(device)
-    predicted_index = predict(model, tensor).item()
+    array = tf.keras.preprocessing.image.img_to_array(image).reshape((-1, 28, 28))
+    predicted_index = predict(model, array).numpy().sum()
     predicted_names.append(labels_map[predicted_index])
 
   logging.info('Run completed')

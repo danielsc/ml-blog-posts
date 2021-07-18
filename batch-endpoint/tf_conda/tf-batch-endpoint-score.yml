@@ -1,11 +1,11 @@
-name: endpoint-score-pytorch
+name: tf-batch-endpoint-score
 channels:
-  - pytorch
   - conda-forge
   - defaults
 dependencies:
   - python=3.7
-  - pytorch=1.7
+  - tensorflow=2.4
+  - pillow
   - pip
   - pip:
     - azureml-defaults

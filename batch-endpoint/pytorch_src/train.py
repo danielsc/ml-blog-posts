@@ -136,7 +136,7 @@ def training_phase(device: str):
   (test_loss, test_accuracy) = evaluate(device, test_dataloader, model, loss_fn)
   print(f'Test accuracy: {test_accuracy * 100:>0.1f}%, test loss: {test_loss:>8f}')
 
-  torch.save(model.state_dict(), 'pytorch_model/weights.pth')
+  torch.save(model, 'pytorch_model/model.pth')
 
 
 def main() -> None:
