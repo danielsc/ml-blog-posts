@@ -16,6 +16,6 @@ deployments:
     instance_type: Standard_NC6s_v3
     scale_settings:
       scale_type: Manual
-      instance_count: 2
+      instance_count: 1
       min_instances: 1
-      max_instances: 2
+      max_instances: 1

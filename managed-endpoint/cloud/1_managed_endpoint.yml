@@ -5,7 +5,6 @@ auth_mode: key
 traffic:
   blue: 100
 
-# VM is built from pre-built Docker image, and has no GPU.
 deployments:
   - name: blue
     model: azureml:pytorch-fashion-weights:1
@@ -17,6 +16,6 @@ deployments:
     instance_type: Standard_DS3_v2
     scale_settings:
       scale_type: Manual
-      instance_count: 2
+      instance_count: 1
       min_instances: 1
-      max_instances: 2
+      max_instances: 1
