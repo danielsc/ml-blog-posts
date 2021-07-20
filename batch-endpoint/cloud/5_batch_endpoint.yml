@@ -1,9 +1,10 @@
 $schema: https://azuremlschemas.azureedge.net/latest/batchEndpoint.schema.json
-name: fashion-endpoint-29
+name: fashion-endpoint-32
 type: batch
 auth_mode: aad_token
 traffic:
-  blue: 100
+  blue: 0
+  green: 100
 
 deployments:
   - name: blue
@@ -17,3 +18,14 @@ deployments:
       target: azureml:gpu-cluster
     mini_batch_size: 10
     output_file_name: predictions_pytorch.csv
+  - name: green
+    model: azureml:tf-fashion-model:1
+    code_configuration:
+      code:
+        local_path: ../tf_src/
+      scoring_script: score.py
+    environment: azureml:tf-gpu-batch-inference-env:1
+    compute: 
+      target: azureml:gpu-cluster
+    mini_batch_size: 10
+    output_file_name: predictions_tf.csv

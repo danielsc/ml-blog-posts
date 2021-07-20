@@ -1,0 +1,6 @@
+$schema: https://azuremlschemas.azureedge.net/latest/environment.schema.json
+name: tf-gpu-batch-inference-prebuilt-env
+version: 1
+docker:
+  image: mcr.microsoft.com/azureml/tensorflow-2.4-ubuntu18.04-py37-cuda11.0.3-gpu-inference:latest
+conda_file: file:../tf_conda/tf-batch-endpoint-score-prebuilt.yml

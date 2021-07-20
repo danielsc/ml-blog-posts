@@ -1,0 +1,6 @@
+$schema: https://azuremlschemas.azureedge.net/latest/environment.schema.json
+name: pytorch-cpu-batch-inference-prebuilt-env
+version: 1
+docker:
+  image: mcr.microsoft.com/azureml/pytorch-1.7-ubuntu18.04-py37-cpu-inference:latest
+conda_file: file:../pytorch_conda/pytorch-batch-endpoint-score.yml
