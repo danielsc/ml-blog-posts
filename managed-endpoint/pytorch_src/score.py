@@ -44,7 +44,7 @@ def init():
   # model_path = './pytorch_model/weights.pth'
 
   model = NeuralNetwork().to(device)
-  model.load_state_dict(torch.load(model_path))
+  model.load_state_dict(torch.load(model_path, map_location=device))
   model.eval()
 
   logging.info('Init complete')
