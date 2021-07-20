@@ -1,0 +1,21 @@
+$schema: https://azuremlschemas.azureedge.net/latest/managedOnlineEndpoint.schema.json
+name: fashion-endpoint-5
+type: online
+auth_mode: key
+traffic:
+  blue: 100
+
+deployments:
+  - name: blue
+    model: azureml:tf-fashion-weights:1
+    code_configuration:
+      code:
+        local_path: ../tf_src/
+      scoring_script: score.py
+    environment: azureml:AzureML-tensorflow-2.4-ubuntu18.04-py37-cpu-inference:1
+    instance_type: Standard_DS3_v2
+    scale_settings:
+      scale_type: Manual
+      instance_count: 1
+      min_instances: 1
+      max_instances: 1

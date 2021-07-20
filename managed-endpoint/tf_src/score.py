@@ -53,7 +53,7 @@ def run(raw_data):
   logging.info('Run started')
 
   X = json.loads(raw_data)['data']
-  X = np.array(X)
+  X = np.array(X).reshape((-1, 28, 28))
   
   predicted_indices = predict(model, X)
   predicted_names = [labels_map[predicted_index.numpy().sum()] for predicted_index in predicted_indices]
