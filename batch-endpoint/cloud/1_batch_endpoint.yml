@@ -1,5 +1,5 @@
 $schema: https://azuremlschemas.azureedge.net/latest/batchEndpoint.schema.json
-name: fashion-endpoint-28
+name: fashion-endpoint-33
 type: batch
 auth_mode: aad_token
 traffic:

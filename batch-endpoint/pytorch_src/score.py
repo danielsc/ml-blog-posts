@@ -44,7 +44,7 @@ def init():
   # Replace previous line with next line and uncomment main to test locally. 
   # model_path = './pytorch_model/model.pth'
 
-  model = torch.load(model_path)
+  model = torch.load(model_path, map_location=device)
   model.eval()
 
   logging.info('Init complete')
