@@ -37,19 +37,19 @@ def init():
   global device
 
   physical_devices = tf.config.list_physical_devices('GPU')
-  logging.info("Num GPUs:", len(physical_devices))
+  logging.info(f'Num GPUs: {len(physical_devices)}')
 
   model_path = os.path.join(os.getenv('AZUREML_MODEL_DIR'), 'tf_model')
   # Replace previous line with next line and uncomment main to test locally. 
   # model_path = './tf_model'
-  model = tf.keras.models.load_model(model_path)
+  model = tf.keras.models.load_model(model_path, compile=False)
 
   logging.info('Init complete')
   pass
 
 
 def run(mini_batch):
-  logging.info(f'Run started: {__file__}, run({mini_batch}')
+  logging.info(f'Run started: run({mini_batch})')
   predicted_names = []
 
   for image_path in mini_batch:

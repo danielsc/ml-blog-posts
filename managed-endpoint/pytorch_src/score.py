@@ -55,16 +55,16 @@ def run(raw_data):
   logging.info('Run started')
 
   X = json.loads(raw_data)['data']
-  X = np.array(X)
+  X = np.array(X).reshape((1, 1, 28, 28))
   X = torch.from_numpy(X).float().to(device)
   
-  predicted_indices = predict(model, X)
-  predicted_names = [labels_map[predicted_index.item()] for predicted_index in predicted_indices]
+  predicted_index = predict(model, X).item()
+  predicted_name = labels_map[predicted_index]
 
-  logging.info(f'Predicted names: {predicted_names}')
+  logging.info(f'Predicted name: {predicted_name}')
 
   logging.info('Run completed')
-  return predicted_names
+  return predicted_name
 
 
 # if __name__ == '__main__':

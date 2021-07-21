@@ -37,13 +37,14 @@ def init():
   global device
 
   physical_devices = tf.config.list_physical_devices('GPU')
-  logging.info("Num GPUs:", len(physical_devices))
+  logging.info(f'Num GPUs: {len(physical_devices)}')
+
   model_path = os.path.join(os.getenv('AZUREML_MODEL_DIR'), 'tf_model/weights')
   # Replace previous line with next line and uncomment main to test locally. 
   # model_path = './tf_model/weights'
 
   model = NeuralNetwork()
-  model.load_weights(model_path)
+  model.load_weights(model_path, compile=False)
 
   logging.info('Init complete')
   pass
@@ -55,13 +56,13 @@ def run(raw_data):
   X = json.loads(raw_data)['data']
   X = np.array(X).reshape((-1, 28, 28))
   
-  predicted_indices = predict(model, X)
-  predicted_names = [labels_map[predicted_index.numpy().sum()] for predicted_index in predicted_indices]
+  predicted_index = predict(model, X).numpy()[0]
+  predicted_name = labels_map[predicted_index]
 
-  logging.info(f'Predicted names: {predicted_names}')
+  logging.info(f'Predicted name: {predicted_name}')
 
   logging.info('Run completed')
-  return predicted_names
+  return predicted_name
 
 
 # if __name__ == '__main__':

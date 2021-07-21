@@ -52,7 +52,7 @@ def init():
 
 
 def run(mini_batch):
-  logging.info(f'Run started: {__file__}, run({mini_batch}')
+  logging.info(f'Run started: run({mini_batch})')
   predicted_names = []
   transform = transforms.ToTensor()
   device = 'cuda' if torch.cuda.is_available() else 'cpu'
