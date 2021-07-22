@@ -1,11 +1,10 @@
+import argparse
 import logging
 import os
 
 import numpy as np
-from PIL import Image
 import tensorflow as tf
-
-from neural_network import NeuralNetwork
+from PIL import Image
 
 
 labels_map = {
@@ -31,25 +30,32 @@ def predict(model: tf.keras.Model, X: np.ndarray) -> tf.Tensor:
 
 
 def init():
-  logging.info('Init started')
-
+  global logger 
   global model
   global device
 
+  arg_parser = argparse.ArgumentParser(description="Argument parser.")
+  arg_parser.add_argument("--logging_level", type=str, help="logging level")
+  args, unknown_args = arg_parser.parse_known_args()  
+  logger = logging.getLogger(__name__)
+  logger.setLevel(args.logging_level.upper())
+
+  logger.info('*** Init started')
+
   physical_devices = tf.config.list_physical_devices('GPU')
-  logging.info(f'Num GPUs: {len(physical_devices)}')
+  logger.info(f'Num GPUs: {len(physical_devices)}')
 
   model_path = os.path.join(os.getenv('AZUREML_MODEL_DIR'), 'tf_model')
   # Replace previous line with next line and uncomment main to test locally. 
   # model_path = './tf_model'
   model = tf.keras.models.load_model(model_path, compile=False)
 
-  logging.info('Init complete')
+  logger.info('*** Init complete')
   pass
 
 
 def run(mini_batch):
-  logging.info(f'Run started: run({mini_batch})')
+  logger.info(f'*** Run started')
   predicted_names = []
 
   for image_path in mini_batch:
@@ -58,7 +64,7 @@ def run(mini_batch):
     predicted_index = predict(model, array).numpy().sum()
     predicted_names.append(labels_map[predicted_index])
 
-  logging.info('Run completed')
+  logger.info('*** Run completed')
   return predicted_names
 
 
