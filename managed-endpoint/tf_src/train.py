@@ -130,8 +130,6 @@ def training_phase():
 
 
 def main() -> None:
-  physical_devices = tf.config.list_physical_devices('GPU')
-  print(f'Num GPUs: {len(physical_devices)}')
   training_phase()
 
 

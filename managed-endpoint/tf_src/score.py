@@ -38,7 +38,6 @@ def init():
 
   physical_devices = tf.config.list_physical_devices('GPU')
   logging.info(f'Num GPUs: {len(physical_devices)}')
-  print(f'Num GPUs: {len(physical_devices)}')
 
   model_path = os.path.join(os.getenv('AZUREML_MODEL_DIR'), 'tf_model/weights')
   # Replace previous line with next line and uncomment main to test locally. 

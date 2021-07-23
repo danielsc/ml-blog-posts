@@ -39,7 +39,6 @@ def init():
 
   device = 'cuda' if torch.cuda.is_available() else 'cpu'
   logging.info(f'Device: {device}')
-  print(f'Device: {device}')
 
   model_path = os.path.join(os.getenv('AZUREML_MODEL_DIR'), 'weights.pth')
   # Replace previous line with next line and uncomment main to test locally. 
