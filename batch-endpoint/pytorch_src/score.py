@@ -41,7 +41,7 @@ def init():
   logger = logging.getLogger(__name__)
   logger.setLevel(args.logging_level.upper())
 
-  logger.info('*** Init started')
+  logger.info('Init started')
 
   device = 'cuda' if torch.cuda.is_available() else 'cpu'
   logger.info(f'Device: {device}')
@@ -53,12 +53,12 @@ def init():
   model = torch.load(model_path, map_location=device)
   model.eval()
 
-  logger.info('*** Init complete')
+  logger.info('Init complete')
   pass
 
 
 def run(mini_batch):
-  logger.info(f'*** Run started')
+  logger.info(f'Run started')
   predicted_names = []
   transform = transforms.ToTensor()
   device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -69,7 +69,7 @@ def run(mini_batch):
     predicted_index = predict(model, tensor).item()
     predicted_names.append(labels_map[predicted_index])
 
-  logger.info('*** Run completed')
+  logger.info('Run completed')
   return predicted_names
 
 

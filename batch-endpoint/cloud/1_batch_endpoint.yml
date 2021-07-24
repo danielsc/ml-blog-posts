@@ -1,5 +1,5 @@
 $schema: https://azuremlschemas.azureedge.net/latest/batchEndpoint.schema.json
-name: fashion-endpoint-42
+name: fashion-endpoint-46
 type: batch
 auth_mode: aad_token
 traffic:
@@ -12,7 +12,7 @@ deployments:
       code:
         local_path: ../pytorch_src/
       scoring_script: score.py
-    environment: azureml:pytorch-cpu-batch-inference-prebuilt-env:1
+    environment: azureml:AzureML-pytorch-1.7-ubuntu18.04-py37-cpu-inference:1
     compute: 
       target: azureml:cpu-cluster
     mini_batch_size: 10

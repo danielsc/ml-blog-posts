@@ -40,7 +40,7 @@ def init():
   logger = logging.getLogger(__name__)
   logger.setLevel(args.logging_level.upper())
 
-  logger.info('*** Init started')
+  logger.info('Init started')
 
   physical_devices = tf.config.list_physical_devices('GPU')
   logger.info(f'Num GPUs: {len(physical_devices)}')
@@ -50,12 +50,12 @@ def init():
   # model_path = './tf_model'
   model = tf.keras.models.load_model(model_path, compile=False)
 
-  logger.info('*** Init complete')
+  logger.info('Init complete')
   pass
 
 
 def run(mini_batch):
-  logger.info(f'*** Run started')
+  logger.info(f'Run started')
   predicted_names = []
 
   for image_path in mini_batch:
@@ -64,7 +64,7 @@ def run(mini_batch):
     predicted_index = predict(model, array).numpy().sum()
     predicted_names.append(labels_map[predicted_index])
 
-  logger.info('*** Run completed')
+  logger.info('Run completed')
   return predicted_names
 
 

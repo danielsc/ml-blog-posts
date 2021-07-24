@@ -6,4 +6,4 @@ channels:
 dependencies:
   - python=3.8
   - pytorch=1.8.1
-  - torchvision
+  - torchvision=0.9

@@ -1,5 +1,5 @@
 $schema: https://azuremlschemas.azureedge.net/latest/batchEndpoint.schema.json
-name: fashion-endpoint-44
+name: fashion-endpoint-54
 type: batch
 auth_mode: aad_token
 traffic:
@@ -12,8 +12,11 @@ deployments:
       code:
         local_path: ../tf_src/
       scoring_script: score.py
-    environment: azureml:tf-gpu-batch-inference-prebuilt-env:1
+    environment: azureml:AzureML-tensorflow-2.4-ubuntu18.04-py37-cpu-inference:1
     compute: 
       target: azureml:gpu-cluster
     mini_batch_size: 10
     output_file_name: predictions_tf.csv
+    environment_variables:
+      AZUREML_EXTRA_REQUIREMENTS_TXT: ../tf_src/requirements.txt
+      
