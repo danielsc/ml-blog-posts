@@ -22,7 +22,7 @@ labels_map = {
   }
 
 
-# @tf.function
+@tf.function
 def predict(model: tf.keras.Model, X: np.ndarray) -> tf.Tensor:
   y_prime = model(X, training=False)
   probabilities = tf.nn.softmax(y_prime, axis=1)
