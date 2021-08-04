@@ -1,0 +1,13 @@
+name: batch-endpoint-mlflow-train
+channels:
+  - pytorch
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.8
+  - pytorch=1.8.1
+  - torchvision=0.9
+  - pip
+  - pip:
+    - mlflow
+    - azureml-mlflow

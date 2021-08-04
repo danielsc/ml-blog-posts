@@ -1,0 +1,20 @@
+$schema: https://azuremlschemas.azureedge.net/latest/batchEndpoint.schema.json
+name: fashion-endpoint-75
+type: batch
+auth_mode: aad_token
+traffic:
+  blue: 100
+
+deployments:
+  - name: blue
+    model: azureml:mlflow-model:1
+    compute: 
+      target: azureml:gpu-cluster
+      instance_count: 1
+    mini_batch_size: 10
+    output_file_name: predictions_mlflow.json
+    retry_settings:
+      max_retries: 3
+      timeout: 30
+    error_threshold: -1 
+    logging_level: info
