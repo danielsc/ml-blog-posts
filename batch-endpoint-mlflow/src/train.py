@@ -9,6 +9,7 @@ from torch.optim import Optimizer
 from torch.utils.data import DataLoader
 from torchvision import datasets
 from torchvision.transforms import ToTensor
+import numpy as np
 
 from neural_network import NeuralNetwork
 
@@ -132,9 +133,57 @@ def training_phase(device: str):
   mlflow.pytorch.save_model(model, 'mlflow-model', code_paths=['src/neural_network.py'])
 
 
+labels_map = {
+    0: 'T-Shirt',
+    1: 'Trouser',
+    2: 'Pullover',
+    3: 'Dress',
+    4: 'Coat',
+    5: 'Sandal',
+    6: 'Shirt',
+    7: 'Sneaker',
+    8: 'Bag',
+    9: 'Ankle Boot',
+  }
+
+
+import mlflow.pyfunc
+class ModelWrapper(mlflow.pyfunc.PythonModel):
+  def load_context(self, context):
+    self.model = mlflow.pytorch.load_model(context.artifacts['pytorch-model'])
+    self.model.eval()
+
+  def predict(self, context, model_input):
+    with torch.no_grad():
+      y_prime = self.model.forward(model_input)
+      probabilities = nn.functional.softmax(y_prime, dim=1)
+      predicted_indices = probabilities.argmax(1)
+      predicted_names = [labels_map[predicted_index] for predicted_index in predicted_indices]
+    return predicted_names
+  
+
+def define_pyfunc_model():
+  mlflow_pyfunc_model_path = 'mlflow-pyfunc-model'
+  artifacts = {
+    'pytorch-model': 'mlflow-model'
+  }
+  try:
+    shutil.rmtree(mlflow_pyfunc_model_path)
+  except:
+    pass
+  mlflow.pyfunc.save_model(mlflow_pyfunc_model_path, python_model=ModelWrapper(),
+    artifacts=artifacts)
+
+  # Make sure we can load the model.
+  loaded_model = mlflow.pyfunc.load_model(mlflow_pyfunc_model_path)
+  test_predictions = loaded_model.predict(np.random.uniform(size=(1, 28, 28)))
+  print(test_predictions)
+
+
 def main() -> None:
   device = 'cuda' if torch.cuda.is_available() else 'cpu'
   training_phase(device)
+  define_pyfunc_model()
 
 
 if __name__ == '__main__':

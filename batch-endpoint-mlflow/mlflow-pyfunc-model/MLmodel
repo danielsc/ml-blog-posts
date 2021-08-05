@@ -1,0 +1,12 @@
+flavors:
+  python_function:
+    artifacts:
+      pytorch-model:
+        path: artifacts/mlflow-model
+        uri: mlflow-model
+    cloudpickle_version: 1.6.0
+    env: conda.yaml
+    loader_module: mlflow.pyfunc.model
+    python_model: python_model.pkl
+    python_version: 3.8.10
+utc_time_created: '2021-08-05 05:36:53.969585'

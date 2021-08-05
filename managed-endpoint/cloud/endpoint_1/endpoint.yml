@@ -1,5 +1,5 @@
 $schema: https://azuremlschemas.azureedge.net/latest/managedOnlineEndpoint.schema.json
-name: fashion-endpoint-4
+name: fashion-endpoint-1
 type: online
 auth_mode: key
 traffic:
@@ -7,13 +7,13 @@ traffic:
 
 deployments:
   - name: blue
-    model: azureml:tf-fashion-weights:1
+    model: azureml:pytorch-fashion-weights:1
     code_configuration:
       code:
-        local_path: ../tf_src/
+        local_path: ../../pytorch_src/
       scoring_script: score.py
-    environment: azureml:tf-gpu-managed-inference-env:1
-    instance_type: Standard_NC6s_v3
+    environment: azureml:AzureML-pytorch-1.7-ubuntu18.04-py37-cpu-inference:9
+    instance_type: Standard_DS3_v2
     scale_settings:
       scale_type: Manual
       instance_count: 1
