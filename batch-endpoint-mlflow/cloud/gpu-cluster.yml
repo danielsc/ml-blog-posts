@@ -1,0 +1,4 @@
+$schema: https://azuremlschemas.azureedge.net/latest/compute.schema.json
+name: gpu-cluster
+type: amlcompute
+size: Standard_NC6s_v3
