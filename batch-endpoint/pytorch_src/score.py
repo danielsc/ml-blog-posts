@@ -7,7 +7,6 @@ from PIL import Image
 from torch import Tensor, nn
 from torchvision import transforms
 
-
 labels_map = {
     0: 'T-Shirt',
     1: 'Trouser',
@@ -37,7 +36,7 @@ def init():
 
   arg_parser = argparse.ArgumentParser(description="Argument parser.")
   arg_parser.add_argument("--logging_level", type=str, help="logging level")
-  args, unknown_args = arg_parser.parse_known_args()  
+  args, _ = arg_parser.parse_known_args()  
   logger = logging.getLogger(__name__)
   logger.setLevel(args.logging_level.upper())
 
@@ -47,14 +46,11 @@ def init():
   logger.info(f'Device: {device}')
 
   model_path = os.path.join(os.getenv('AZUREML_MODEL_DIR'), 'model.pth')
-  # Replace previous line with next line and uncomment main to test locally. 
-  # model_path = './pytorch_model/model.pth'
 
   model = torch.load(model_path, map_location=device)
   model.eval()
 
-  logger.info('Init complete')
-  pass
+  logger.info('Init completed')
 
 
 def run(mini_batch):
@@ -71,10 +67,3 @@ def run(mini_batch):
 
   logger.info('Run completed')
   return predicted_names
-
-
-# if __name__ == '__main__':
-#   init()
-#   image_paths = [f'sample_request/{filename}' for filename in os.listdir('sample_request')]
-#   image_paths.sort()
-#   print(run(image_paths))  

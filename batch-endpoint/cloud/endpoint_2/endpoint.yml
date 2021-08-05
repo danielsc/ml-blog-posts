@@ -1,5 +1,5 @@
 $schema: https://azuremlschemas.azureedge.net/latest/batchEndpoint.schema.json
-name: fashion-endpoint-46
+name: fashion-endpoint-81
 type: batch
 auth_mode: aad_token
 traffic:
@@ -7,13 +7,14 @@ traffic:
 
 deployments:
   - name: blue
-    model: azureml:pytorch-fashion-model:1
+    model: azureml:tf-fashion-model:1
     code_configuration:
       code:
-        local_path: ../pytorch_src/
+        local_path: ../../tf_src/
       scoring_script: score.py
-    environment: azureml:AzureML-pytorch-1.7-ubuntu18.04-py37-cpu-inference:1
+    environment: azureml:tf-cpu-batch-env:1
     compute: 
       target: azureml:cpu-cluster
     mini_batch_size: 10
-    output_file_name: predictions_pytorch.csv
+    output_file_name: predictions_tf.csv
+

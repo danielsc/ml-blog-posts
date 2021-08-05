@@ -36,7 +36,7 @@ def init():
 
   arg_parser = argparse.ArgumentParser(description="Argument parser.")
   arg_parser.add_argument("--logging_level", type=str, help="logging level")
-  args, unknown_args = arg_parser.parse_known_args()  
+  args, _ = arg_parser.parse_known_args()  
   logger = logging.getLogger(__name__)
   logger.setLevel(args.logging_level.upper())
 
@@ -46,12 +46,9 @@ def init():
   logger.info(f'Num GPUs: {len(physical_devices)}')
 
   model_path = os.path.join(os.getenv('AZUREML_MODEL_DIR'), 'tf_model')
-  # Replace previous line with next line and uncomment main to test locally. 
-  # model_path = './tf_model'
   model = tf.keras.models.load_model(model_path, compile=False)
 
-  logger.info('Init complete')
-  pass
+  logger.info('Init completed')
 
 
 def run(mini_batch):
@@ -66,10 +63,3 @@ def run(mini_batch):
 
   logger.info('Run completed')
   return predicted_names
-
-
-# if __name__ == '__main__':
-#   init()
-#   image_paths = [f'sample_request/{filename}' for filename in os.listdir('sample_request')]
-#   image_paths.sort()
-#   print(run(image_paths))  
