@@ -1,5 +1,5 @@
 $schema: https://azuremlschemas.azureedge.net/latest/batchEndpoint.schema.json
-name: fashion-endpoint-75
+name: fashion-pyfunc-endpoint-3
 type: batch
 auth_mode: aad_token
 traffic:
@@ -7,12 +7,12 @@ traffic:
 
 deployments:
   - name: blue
-    model: azureml:mlflow-model:1
+    model: azureml:mlflow-pyfunc-model:1
     compute: 
       target: azureml:gpu-cluster
       instance_count: 1
     mini_batch_size: 10
-    output_file_name: predictions_mlflow.json
+    output_file_name: predictions_mlflow.csv
     retry_settings:
       max_retries: 3
       timeout: 30
