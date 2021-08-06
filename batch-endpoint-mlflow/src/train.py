@@ -132,6 +132,7 @@ def training_phase(device: str):
     pass
   mlflow.pytorch.save_model(model, 'mlflow-model', code_paths=['src/neural_network.py'])
 
+
 def save_pyfunc_model():
   mlflow_pyfunc_model_path = 'mlflow-pyfunc-model'
   artifacts = {
