@@ -1,4 +1,4 @@
-import shutil, yaml
+import shutil
 from typing import Tuple
 
 import mlflow
@@ -132,24 +132,18 @@ def training_phase(device: str):
     pass
   mlflow.pytorch.save_model(model, 'mlflow-model', code_paths=['src/neural_network.py'])
 
-def load_yaml(filename):
-   with open(filename, encoding='utf-8') as fh:
-      file_dict = yaml.load(fh, Loader=yaml.FullLoader)
-   return file_dict
-
 def save_pyfunc_model():
   mlflow_pyfunc_model_path = 'mlflow-pyfunc-model'
   artifacts = {
     'pytorch-model': 'mlflow-model'
   }
-  conda_dependencies = load_yaml('mlflow-model/conda.yaml')
   try:
     shutil.rmtree(mlflow_pyfunc_model_path)
   except:
     pass
   model = ModelWrapper()
   mlflow.pyfunc.save_model(mlflow_pyfunc_model_path, python_model=model,
-    artifacts=artifacts, code_path=['src/model_wrapper.py'], conda_env=conda_dependencies)
+    artifacts=artifacts, code_path=['src/model_wrapper.py'], conda_env='mlflow-model/conda.yaml')
 
 
 def main() -> None:
